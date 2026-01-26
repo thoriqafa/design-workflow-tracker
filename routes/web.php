@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\pages\HomePage;
 use App\Http\Controllers\pages\workprogress\WorkProgressController;
 use App\Http\Controllers\pages\workprogress\WorkMonitoringController;
 use Illuminate\Support\Facades\Route;
@@ -9,9 +10,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('content.pages.pages-home');
 // });
 
-Route::get('/', function () {
-    return view('content.pages.pages-home');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [HomePage::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

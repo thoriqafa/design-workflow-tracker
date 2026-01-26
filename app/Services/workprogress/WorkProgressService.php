@@ -29,6 +29,16 @@ class WorkProgressService
         return $this->workProgressRepository->find($id);
     }
 
+    public function countByStatusWork(int $statusWork): int
+    {
+        return $this->workProgressRepository->countByStatusWork($statusWork);
+    }
+
+    public function countAllByStatus(): array
+    {
+        return $this->workProgressRepository->countAllByStatus();
+    }
+
     public function datatable(Request $request)
     {
         $user = auth()->user();
@@ -94,17 +104,17 @@ class WorkProgressService
                         <button type="button" class="btn btn-sm btn-primary btn-row-edit"
                                 data-id="' . $row->id . '"
                                 title="Edit">
-                            <i class="icon-base bx bx-edit icon-md"></i> 
+                            <i class="icon-base bx bx-edit icon-md"></i>
                         </button>
                         <button type="button" class="btn btn-sm btn-row-approval"
                                 data-id="' . $row->id . '"
                                 title="Approval">
-                            <i class="icon-base bx bx-task icon-md"></i> 
+                            <i class="icon-base bx bx-task icon-md"></i>
                         </button>
                         <button type="button" class="btn btn-sm btn-row-remark"
                                 data-id="' . $row->id . '"
                                 title="Remark">
-                            <i class="icon-base bx bx-message-square-dots icon-md"></i> 
+                            <i class="icon-base bx bx-message-square-dots icon-md"></i>
                         </button>
                         ';
                 if ($row->start_time == null && $row->end_time == null) {
@@ -228,7 +238,7 @@ class WorkProgressService
     {
         return $this->designApprovalRequestRepository->restore($id);
     }
-    
+
     public function forceDelete(int $id)
     {
         return $this->designApprovalRequestRepository->forceDelete($id);

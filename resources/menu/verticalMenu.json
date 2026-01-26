@@ -8,7 +8,7 @@
       "roles": [
         "admin",
         "staff",
-        "manager"
+        "supervisor"
       ]
     },
     {
@@ -21,7 +21,7 @@
       "roles": [
         "admin",
         "staff",
-        "manager"
+        "supervisor"
       ],
       "submenu": [
         {
@@ -40,7 +40,7 @@
           "roles": [
             "admin",
             "staff",
-            "manager"
+            "supervisor"
           ]
         }
       ]

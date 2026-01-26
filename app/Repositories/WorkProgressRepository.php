@@ -17,6 +17,32 @@ class WorkProgressRepository
         return WorkProgress::findOrFail($id);
     }
 
+    public function countByStatusWork(int $statusWork): int
+    {
+        return WorkProgress::where('status_work', $statusWork)->count();
+    }
+
+    // Jika mau sekaligus semua status:
+    public function countAllByStatus(): array
+  {
+      $user =auth()->user();
+
+      $query = WorkProgress::query();
+
+      if ($user->role === 'staff') {
+          $query->where('created_by', $user->id);
+      }
+
+      $counts = $query->selectRaw('status_work, COUNT(*) as total')
+          ->groupBy('status_work')
+          ->pluck('total','status_work')
+          ->toArray();
+
+      $counts['all'] = array_sum($counts);
+
+      return $counts;
+  }
+
     public function datatableQuery()
     {
         // $user = Auth::user();
