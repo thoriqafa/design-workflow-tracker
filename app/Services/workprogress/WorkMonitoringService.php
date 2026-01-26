@@ -39,17 +39,19 @@ class WorkMonitoringService
             ->addIndexColumn()
 
             ->filter(function ($query) use ($request) {
-                if ($request->status_work !== null && $request->status_work !== '') {
-                    $query->where('tx_work_progress.status_work', $request->status_work);
+                if ($request->statusWork !== null && $request->statusWork !== '') {
+                    $query->where('tx_work_progress.status_work', $request->statusWork);
                 }
 
-                if ($request->tanggal !== null && $request->tanggal !== '') {
-                    $range = explode(' to ', $request->tanggal);
-                    if (count($range) === 2) {
-                        $start = Carbon::createFromFormat('Y-m-d', $range[0])->startOfDay();
-                        $end = Carbon::createFromFormat('Y-m-d', $range[1])->endOfDay();
-                        $query->whereBetween('tx_work_progress.created_at', [$start, $end]);
-                    }
+                if ($request->tanggalAwal !== null && $request->tanggalAkhir !== '') {
+                    // $query->whereBetween('tx_work_progress.created_at', [$request->tanggalAwal, $request->tanggalAkhir]);
+                    $query->whereBetween(
+                        'tx_work_progress.created_at',
+                        [
+                            Carbon::parse($request->tanggalAwal)->startOfDay(),
+                            Carbon::parse($request->tanggalAkhir)->endOfDay()
+                        ]
+                    );
                 }
 
                 if ($search = $request->input('search.value')) {
@@ -81,30 +83,48 @@ class WorkMonitoringService
     {
         $user = auth()->user();
 
-        // Ambil query dasar dari repository
         $query = $this->workProgressRepository->datatableQuery();
 
-        // Terapkan batasan role (staff hanya lihat milik sendiri)
         if ($user->role === 'staff') {
             $query->where('tx_work_progress.created_by', $user->id);
         }
 
-        // Ambil parameter DataTables
-        $search = $request->input('search.value') ?? $request->input('search');
-        $start = (int) ($request->input('start') ?? 0);
-        $length = (int) ($request->input('length') ?? 10);
+        // $search = $request->input('search.value') ?? $request->input('search');
+        // $start = (int) ($request->input('start') ?? 0);
+        // $length = (int) ($request->input('length') ?? 10);
 
-        // Terapkan pencarian global (sesuai kolom yang bisa di-search)
-        if ($search) {
+        // if ($search) {
+        //     $query->where(function ($q) use ($search) {
+        //         $q->where('tx_work_progress.supplier', 'like', "%{$search}%")
+        //         ->orWhere('tx_work_progress.item', 'like', "%{$search}%")
+        //         ->orWhere('tx_work_progress.no_approval', 'like', "%{$search}%")
+        //         ->orWhere('creator.name', 'like', "%{$search}%");
+        //     });
+        // }
+
+        if ($request->filled('statusWork')) {
+            $query->where('tx_work_progress.status_work', $request->statusWork);
+        }
+
+        if ($request->filled('tanggalAwal') && $request->filled('tanggalAkhir')) {
+            $query->whereBetween(
+                'tx_work_progress.created_at',
+                [
+                    Carbon::parse($request->tanggalAwal)->startOfDay(),
+                    Carbon::parse($request->tanggalAkhir)->endOfDay()
+                ]
+            );
+        }
+
+        if ($search = $request->input('search.value') ?? $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('tx_work_progress.supplier', 'like', "%{$search}%")
-                ->orWhere('tx_work_progress.item', 'like', "%{$search}%")
-                ->orWhere('tx_work_progress.no_approval', 'like', "%{$search}%")
-                ->orWhere('creator.name', 'like', "%{$search}%");
+                  ->orWhere('tx_work_progress.item', 'like', "%{$search}%")
+                  ->orWhere('tx_work_progress.no_approval', 'like', "%{$search}%")
+                  ->orWhere('creator.name', 'like', "%{$search}%");
             });
         }
 
-        // Ambil hanya data yang sesuai dengan halaman saat ini
         return $query->get();
         // return $query->skip($start)->take($length)->get();
     }

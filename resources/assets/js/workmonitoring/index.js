@@ -35,6 +35,10 @@ function formatDateTime(d) {
 }
 
 $(document).ready(function () {
+  let tglAwal = formatDateTime(new Date());
+  let tglAkhir = formatDateTime(new Date());
+  let statusWork = '';
+
   let workMonitoringTable = $('#workMonitoringTable').DataTable({
     processing: true,
     serverSide: true,
@@ -43,9 +47,9 @@ $(document).ready(function () {
     ajax: {
       url: '/work-monitoring/datatable',
       data: function (d) {
-        d.status = statusWork;
-        d.tanggal = tglAwal;
-        d.tanggal = tglAkhir;
+        d.statusWork = statusWork;
+        d.tanggalAwal = tglAwal;
+        d.tanggalAkhir = tglAkhir;
       }
     },
 
@@ -244,6 +248,10 @@ $(document).ready(function () {
     let dt = $('#workMonitoringTable').DataTable();
     let params = new URLSearchParams();
 
+    params.append('statusWork', statusWork);
+    params.append('tanggalAwal', tglAwal);
+    params.append('tanggalAkhir', tglAkhir);
+
     // Ambil search, start, length dari DataTables
     params.append('search', dt.search());
     params.append('start', dt.page.info().start);
@@ -292,11 +300,6 @@ $(document).ready(function () {
     });
   }
   // =================== end =======================
-
-  let tglAwal = '';
-  let tglAkhir = '';
-  let statusWork = '';
-
   $('#bs-rangepicker-basic').on('apply.daterangepicker', function (ev, picker) {
     tglAwal = formatDateTime(picker.startDate.toDate());
     tglAkhir = formatDateTime(picker.endDate.toDate());
@@ -314,9 +317,9 @@ $(document).ready(function () {
       return;
     }
 
-    console.log('Saved range :', tglAwal, tglAkhir);
-    console.log('Saved status:', statusWork);
+    // console.log('Saved range :', tglAwal, tglAkhir);
+    // console.log('Saved status:', statusWork);
 
-    // $('#myTable').DataTable().ajax.reload();
+    workMonitoringTable.ajax.reload();
   });
 });

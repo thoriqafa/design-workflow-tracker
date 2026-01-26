@@ -43,7 +43,7 @@
           {{-- @can('design.upload') --}}
           <div class="row mb-4">
 
-            @if (auth()->user()->role === 'manager')
+            @if (auth()->user()->role === 'supervisor')
               <div class="card icon-card cursor-pointer text-center mb-6 mx-3 border shadow-none" id="btnExport">
                 <div class="card-body py-5 px-0">
                   <i class="bx bx-export fs-2 mb-1"></i>
