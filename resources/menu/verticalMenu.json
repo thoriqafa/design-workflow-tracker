@@ -1,0 +1,49 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon icon-base bx bx-grid-alt",
+      "slug": "pages-home",
+      "roles": [
+        "admin",
+        "staff",
+        "manager"
+      ]
+    },
+    {
+      "name": "Design Works",
+      "icon": "menu-icon icon-base bx bx-check-shield",
+      "slug": [
+        "workmonitoring",
+        "workprogress"
+      ],
+      "roles": [
+        "admin",
+        "staff",
+        "manager"
+      ],
+      "submenu": [
+        {
+          "name": "My Works",
+          "url": "/work-progress",
+          "slug": "workprogress",
+          "roles": [
+            "admin",
+            "staff"
+          ]
+        },
+        {
+          "name": "Monitoring Works",
+          "url": "/work-monitoring",
+          "slug": "workmonitoring",
+          "roles": [
+            "admin",
+            "staff",
+            "manager"
+          ]
+        }
+      ]
+    }
+  ]
+}

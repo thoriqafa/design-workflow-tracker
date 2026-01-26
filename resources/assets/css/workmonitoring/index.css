@@ -1,0 +1,128 @@
+body {
+  background-color: #f5f6fa;
+}
+
+.card {
+  border-radius: 12px;
+  border: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+.card-body {
+  padding: 1.75rem;
+}
+
+h4 {
+  letter-spacing: 0.3px;
+}
+
+.text-muted {
+  font-size: 0.9rem;
+}
+
+.icon-card {
+  width: 110px;
+  border-radius: 14px;
+  transition: all 0.25s ease;
+  background: #ffffff;
+}
+
+.icon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.icon-card i {
+  color: #3f51b5;
+}
+
+.icon-card .icon-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #444;
+}
+
+div.dataTables_wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#workMonitoringTable {
+  width: 100%;
+  min-width: 1500px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  background: #ffffff;
+}
+
+#workMonitoringTable th,
+#workMonitoringTable td {
+  padding: 0.55rem 0.6rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#workMonitoringTable thead th {
+  background: #0c1555;
+  color: #ffffff;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  height: 36px;
+  padding: 6px;
+  border-bottom: 2px solid #3c4160;
+}
+
+#workMonitoringTable thead tr:nth-child(2) th {
+  background: #0c1555;
+  font-size: 0.7rem;
+  height: 30px;
+}
+
+#workMonitoringTable tbody tr {
+  transition: background 0.15s ease;
+}
+
+#workMonitoringTable tbody tr:hover {
+  background-color: #f1f3f9;
+}
+
+#workMonitoringTable tbody tr:nth-child(even) {
+  background-color: #fafbff;
+}
+
+.btn-row-remark {
+  background: #ff9f43;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.btn-row-remark:hover {
+  background: #ff851b;
+}
+
+.btn-row-approval {
+  background: #2ecc71;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.btn-row-approval:hover {
+  background: #27ae60;
+}
+
+.dataTables_scrollHead table,
+.dataTables_scrollBody table {
+  width: 100% !important;
+}
