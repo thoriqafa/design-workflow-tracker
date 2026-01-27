@@ -13,7 +13,7 @@ $(document).ready(function () {
     btn.prop('disabled', true);
 
     $.ajax({
-      url: '/work-progress/' + id,
+      url: baseUrl + '/work-progress/' + id,
       method: 'POST',
       data: form.serialize(),
       success: function (res) {

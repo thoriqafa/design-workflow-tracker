@@ -49,7 +49,7 @@ $(document).ready(function () {
     btn.prop('disabled', true);
 
     $.ajax({
-      url: urlForm,
+      url: baseUrl + urlForm,
       method: 'POST',
       data: form.serialize(),
       success: function (res) {

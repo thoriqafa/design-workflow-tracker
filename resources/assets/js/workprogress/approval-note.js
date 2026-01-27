@@ -24,7 +24,7 @@ $(document).ready(function () {
     var formData = form.serialize();
 
     $.ajax({
-      url: '/work-progress/approval/store',
+      url: baseUrl + '/work-progress/approval/store',
       method: 'POST',
       data: formData,
       success: function (response) {

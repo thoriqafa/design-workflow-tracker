@@ -45,7 +45,7 @@ $(document).ready(function () {
     responsive: false,
     autoWidth: false,
     ajax: {
-      url: '/work-monitoring/datatable',
+      url: baseUrl + '/work-monitoring/datatable',
       data: function (d) {
         d.statusWork = statusWork;
         d.tanggalAwal = tglAwal;

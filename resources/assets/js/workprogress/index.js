@@ -44,7 +44,7 @@ $(document).ready(function () {
     responsive: false,
     autoWidth: false,
     ajax: {
-      url: '/work-progress/datatable'
+      url: baseUrl + '/work-progress/datatable'
       // data: function (d) {
       //   d.status = $('#filter-status').val();
       //   d.tanggal = $('#filter-tanggal').val();
@@ -233,7 +233,7 @@ $(document).ready(function () {
 
     const id = $(this).data('id');
     $.ajax({
-      url: '/work-progress/' + id,
+      url: baseUrl + '/work-progress/' + id,
       method: 'GET',
       success: function (res) {
         const modal = $('#modalCreateEdit');
@@ -278,7 +278,7 @@ $(document).ready(function () {
     // console.log(startTime + ' - ' + endTime + ' - ' + duration);
 
     $.ajax({
-      url: '/work-progress/' + id,
+      url: baseUrl + '/work-progress/' + id,
       method: 'POST',
       data: {
         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -302,7 +302,7 @@ $(document).ready(function () {
 
     const id = $(this).data('id');
     $.ajax({
-      url: '/work-progress/' + id,
+      url: baseUrl + '/work-progress/' + id,
       method: 'POST',
       data: {
         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -325,7 +325,7 @@ $(document).ready(function () {
 
     const id = $(this).data('id');
     $.ajax({
-      url: '/work-progress/' + id,
+      url: baseUrl + '/work-progress/' + id,
       method: 'GET',
       success: function (res) {
         const modal = $('#modalRemarks');
@@ -360,7 +360,7 @@ $(document).ready(function () {
     repeaterColorList.find('[data-repeater-item]').remove();
 
     $.ajax({
-      url: '/work-progress/approval/get/' + id,
+      url: baseUrl + '/work-progress/approval/get/' + id,
       method: 'GET',
       success: function (res) {
         // form.data('header_id', id);
