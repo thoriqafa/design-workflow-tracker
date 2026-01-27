@@ -56,7 +56,7 @@
                 <span class="avatar-initial rounded bg-label-info"><i
                     class="icon-base bx bx-time-five icon-lg"></i></span>
               </div>
-              <h4 class="mb-0">{{ $taskCounts['all'] ?? 0 }}</h4>
+              <h4 class="mb-0">{{ $taskCounts['0'] ?? 0 }}</h4>
             </div>
             <p class="mb-2">Pending Tasks</p>
             <p class="mb-0">
