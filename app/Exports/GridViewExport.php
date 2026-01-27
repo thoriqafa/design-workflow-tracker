@@ -19,7 +19,7 @@ class GridViewExport implements FromView
     {
         $monthNow = Carbon::now()->format('F - Y');
 
-        return view('content\pages\monitoring\export-view', [
+        return view('content.pages.monitoring.export-view', [
             'items' => $this->data,
             'monthNow' => $monthNow
         ]);

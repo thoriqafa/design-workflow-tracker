@@ -258,7 +258,7 @@ $(document).ready(function () {
     params.append('length', dt.page.info().length);
 
     // Arahkan ke route export yang benar
-    window.location.href = '/work-monitoring/export-excel?' + params.toString();
+    window.location.href = baseUrl + '/work-monitoring/export-excel?' + params.toString();
   });
   // =================== end =======================
 
