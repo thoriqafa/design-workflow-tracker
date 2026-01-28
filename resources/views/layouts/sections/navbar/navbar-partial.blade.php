@@ -98,6 +98,14 @@
         <li>
           <div class="dropdown-divider my-1"></div>
         </li>
+        <li>
+          <a class="dropdown-item" href="{{ route('profile.edit') }}">
+            <i class="icon-base bx bx-cog icon-md me-3"></i><span>Setting Profile</span>
+          </a>
+        </li>
+        <li>
+          <div class="dropdown-divider my-1"></div>
+        </li>
         @if (Auth::check())
           <li>
             <a class="dropdown-item" href="{{ route('logout') }}"
