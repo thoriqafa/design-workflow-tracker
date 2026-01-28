@@ -30,7 +30,7 @@ deploy_production:
   script:
     - scp -o StrictHostKeyChecking=no app.tar deploy@$SERVER_IP:/home/deploy/apps/desflow/
     - ssh -o StrictHostKeyChecking=no deploy@$SERVER_IP "
-        cd /home/deploy/desflow &&
+        cd /home/deploy/apps/desflow &&
         docker load < app.tar &&
         docker compose up -d
       "
