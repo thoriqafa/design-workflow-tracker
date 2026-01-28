@@ -1,7 +1,8 @@
+# =========================
 # Base PHP image + extensions
+# =========================
 FROM php:8.3-apache AS base
 
-# System dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     git unzip zip curl \
     libzip-dev \
@@ -12,82 +13,108 @@ RUN apt-get update && apt-get install -y \
  && docker-php-ext-install pdo pdo_mysql mysqli zip gd mbstring intl \
  && rm -rf /var/lib/apt/lists/*
 
-# Apache configuration
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/sites-available/000-default.conf \
-    /etc/apache2/apache2.conf \
+      /etc/apache2/sites-available/000-default.conf \
+      /etc/apache2/apache2.conf \
  && a2enmod rewrite \
  && sed -i 's|AllowOverride None|AllowOverride All|g' /etc/apache2/apache2.conf \
  && echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# PHP configuration
-COPY php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY docker/8.2/php.ini /usr/local/etc/php/conf.d/custom.ini
 RUN printf "upload_max_filesize=100M\npost_max_size=120M\n" \
   > /usr/local/etc/php/conf.d/uploads.ini
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 EXPOSE 80
 
 
-# Composer dependencies build stage
-FROM composer:2 AS composer_build
+# =========================
+# Composer build stage
+# =========================
+FROM base AS composer_build
 
 WORKDIR /app
-COPY composer.json composer.lock ./
+
+# Copy full source (WAJIB untuk Laravel autoload & helpers)
+COPY . .
+
+# Folder wajib Laravel saat composer jalan
+RUN mkdir -p \
+    bootstrap/cache \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs
+
 RUN composer install \
-    --no-dev \
     --optimize-autoloader \
     --no-interaction \
-    --prefer-dist \
-    --no-scripts
+    --prefer-dist
 
 
-# Vite / NPM build stage
+# =========================
+# Vite / Node build stage
+# =========================
 FROM node:20-bookworm-slim AS vite_build
 
 WORKDIR /app
+RUN corepack enable
 
-# Copy only npm files first (cache friendly)
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Copy full source
 COPY . .
-
-# Build Vite assets
-RUN npm run build
+RUN yarn build
 
 
+# =========================
 # Final application image
+# =========================
 FROM base AS app
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
 WORKDIR /var/www/html
 
-# Copy application source
+# Copy source
 COPY . .
 
-# Copy vendor from composer stage
+# Copy vendor & built assets
 COPY --from=composer_build /app/vendor ./vendor
-
-# Copy built Vite assets
 COPY --from=vite_build /app/public/build ./public/build
 
-# Laravel storage/cache permissions
+# Folder wajib Laravel di runtime
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
+# Bersihkan cache yang mungkin ikut ter-copy
+RUN rm -rf bootstrap/cache/*
+
+# Permission yang benar
 RUN chown -R www-data:www-data storage bootstrap/cache \
  && find storage bootstrap/cache -type d -exec chmod 775 {} \; \
  && find storage bootstrap/cache -type f -exec chmod 664 {} \;
 
-# Create storage symlink (aman kalau sudah ada)
-RUN php artisan storage:link || true
+RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage || true
 
-# Start container
-CMD ["sh", "-c", "\
+
+# =========================
+# Startup sequence (tanpa entrypoint)
+# =========================
+CMD sh -c "php artisan config:clear && \
+php artisan cache:clear && \
+php artisan route:clear && \
+php artisan view:clear && \
+php artisan storage:link || true && \
 php artisan migrate --force --no-interaction && \
-php artisan config:clear && \
 php artisan config:cache && \
 php artisan route:cache && \
 php artisan view:cache && \
-apache2-foreground"]
+exec apache2-foreground"
