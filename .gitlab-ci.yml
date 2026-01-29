@@ -1,0 +1,38 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_NAME: desflow:latest
+
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - du -sh .
+    - docker build -t $IMAGE_NAME .
+    - docker save $IMAGE_NAME > app.tar
+  artifacts:
+    paths:
+      - app.tar
+    expire_in: 1 hour
+
+deploy_production:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+  script:
+    - scp -o StrictHostKeyChecking=no app.tar deploy@$SERVER_IP:/home/deploy/apps/desflow/
+    - ssh -o StrictHostKeyChecking=no deploy@$SERVER_IP "
+        cd /home/deploy/apps/desflow &&
+        docker load < app.tar &&
+        docker compose up -d
+      "
+  only:
+    - main
