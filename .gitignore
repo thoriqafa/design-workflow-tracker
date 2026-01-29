@@ -28,7 +28,7 @@ yarn-error.log
 
 !/public/assets
 !/public/assets/*
-/resources/assets/vendor/fonts/iconify/*
+# /resources/assets/vendor/fonts/iconify/*
 /public/css
 /public/js
 /public/mix-manifest.json
