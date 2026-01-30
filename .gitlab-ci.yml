@@ -6,7 +6,11 @@ deploy_production:
   tags:
     - selfhosted
   script:
-    - rsync -av --delete ./ /home/project/desflow/app/
+    # Pastikan folder deploy ada
+    - mkdir -p /home/project/deploy/desflow
+
+    # Sinkronisasi file ke folder deploy
+    - rsync -av --delete ./ /home/project/deploy/desflow/
 
     - cd /home/project/desflow
 
