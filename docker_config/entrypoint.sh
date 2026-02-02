@@ -7,6 +7,12 @@ set -e
 # migrations should be run by a separate release phase or a single leader instance,
 # not by every container on startup.
 # However, for this setup, we'll run it here.
+# Run optimization commands
+echo "Caching configuration..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
 echo "Running migrations..."
 php artisan migrate --force
 

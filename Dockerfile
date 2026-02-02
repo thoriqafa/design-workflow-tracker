@@ -64,11 +64,7 @@ COPY --from=composer_build /app/vendor ./vendor
 # Assuming Vite build output is in public/build
 COPY --from=frontend /app/public/build ./public/build
 
-# Optimize Laravel application
-RUN php artisan optimize:clear && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
+# Optimization commands moved to entrypoint.sh to run with runtime env vars
 
 # Setup file permissions
 RUN chown -R www-data:www-data \
