@@ -60,6 +60,9 @@ COPY . .
 # Copy vendor libraries from composer stage
 COPY --from=composer_build /app/vendor ./vendor
 
+# Ensure bootstrap/cache is clean (fixes issues with local dirty cache)
+RUN rm -rf bootstrap/cache/*
+
 # Copy frontend assets from frontend stage
 # Assuming Vite build output is in public/build
 COPY --from=frontend /app/public/build ./public/build

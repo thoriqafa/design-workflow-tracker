@@ -3,18 +3,20 @@ set -e
 
 # Run standard Laravel production commands
 
-# Note: In a real production environment with horizontal scaling, 
-# migrations should be run by a separate release phase or a single leader instance,
-# not by every container on startup.
-# However, for this setup, we'll run it here.
 # Run optimization commands
+echo "Clearing caches..."
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+
+echo "Running migrations..."
+php artisan migrate --force --no-interaction
+
 echo "Caching configuration..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-
-echo "Running migrations..."
-php artisan migrate --force
 
 echo "Creating storage link..."
 php artisan storage:link
