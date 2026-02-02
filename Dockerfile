@@ -15,7 +15,7 @@ COPY composer.json composer.lock ./
 # --no-interaction: Do not ask any interactive question
 # --prefer-dist: Download packages dist (zip) if possible
 # --no-scripts: Do not execute scripts defined in composer.json
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts --ignore-platform-reqs
 
 # Stage 3: Final application image
 FROM php:8.3-apache AS app
