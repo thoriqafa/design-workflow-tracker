@@ -1,27 +1,30 @@
 stages:
   - deploy
 
+variables:
+  # Define the deployment directory here for easy reconfiguration
+  APP: "desflow"
+
 deploy_production:
   stage: deploy
   tags:
     - selfhosted
+  only:
+    - main
   script:
-    # Pastikan folder deploy ada
-    - mkdir -p /home/project/deploy/desflow
+    # Create directory if it doesn't exist
+    - mkdir -p /home/project/deploy/$APP
 
-    # Sinkronisasi file ke folder deploy
-    - rsync -av --delete ./ /home/project/deploy/desflow/
+    # Sync files to the server
+    # Note: We sync the *contents* of current dir (.) into the specific folder
+    - rsync -av --delete ./ /home/project/deploy/$APP/
 
-    - cd /home/project/desflow
+    # Go to the project root where the server-managed docker-compose.yml is located
+    # (Assuming the compose file is INSIDE this directory as per recent instructions)
+    - cd /home/project/$APP
 
-    # Stop container + hapus image project ini
-    - docker compose down
+    # Build and start the container
+    - docker compose up -d --build --force-recreate --remove-orphans
 
-    # Hapus semua container yang tidak terpakai
+    # Prune unused images to save space
     - docker image prune -f
-
-    # Build image baru
-    - docker compose build --no-cache
-
-    # Jalankan container baru
-    - docker compose up -d

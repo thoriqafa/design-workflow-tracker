@@ -1,120 +1,87 @@
-# =========================
-# Base PHP image + extensions
-# =========================
-FROM php:8.3-apache AS base
+# Stage 1: Build frontend assets
+FROM node:18-alpine AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
+# Stage 2: Build backend dependencies
+FROM composer:2 AS composer_build
+WORKDIR /app
+COPY composer.json composer.lock ./
+# --no-dev: Install only production dependencies
+# --optimize-autoloader: Generate optimized autoloader
+# --no-interaction: Do not ask any interactive question
+# --prefer-dist: Download packages dist (zip) if possible
+# --no-scripts: Do not execute scripts defined in composer.json
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+# Stage 3: Final application image
+FROM php:8.3-apache AS app
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip zip curl \
     libzip-dev \
-    libpng-dev libjpeg62-turbo-dev libfreetype6-dev libwebp-dev \
-    libonig-dev libxml2-dev \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libwebp-dev \
+    libonig-dev \
+    libxml2-dev \
     libicu-dev \
- && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
- && docker-php-ext-install pdo pdo_mysql mysqli zip gd mbstring intl \
- && rm -rf /var/lib/apt/lists/*
+    zip \
+    unzip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install \
+    pdo_mysql \
+    mysqli \
+    zip \
+    gd \
+    mbstring \
+    intl \
+    opcache \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+# Enable Apache modules
+RUN a2enmod rewrite
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-      /etc/apache2/sites-available/000-default.conf \
-      /etc/apache2/apache2.conf \
- && a2enmod rewrite \
- && sed -i 's|AllowOverride None|AllowOverride All|g' /etc/apache2/apache2.conf \
- && echo "ServerName localhost" >> /etc/apache2/apache2.conf
+# Configure PHP & Apache
+COPY docker_config/php/php.ini /usr/local/etc/php/conf.d/custom-php.ini
+COPY docker_config/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker_config/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-COPY docker/8.2/php.ini /usr/local/etc/php/conf.d/custom.ini
-RUN printf "upload_max_filesize=100M\npost_max_size=120M\n" \
-  > /usr/local/etc/php/conf.d/uploads.ini
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR /var/www/html
-EXPOSE 80
-
-
-# =========================
-# Composer build stage
-# =========================
-FROM base AS composer_build
-
-WORKDIR /app
-
-# Copy full source (WAJIB untuk Laravel autoload & helpers)
-COPY . .
-
-# Folder wajib Laravel saat composer jalan
-RUN mkdir -p \
-    bootstrap/cache \
-    storage/framework/cache \
-    storage/framework/sessions \
-    storage/framework/views \
-    storage/logs
-
-RUN composer install \
-    --optimize-autoloader \
-    --no-interaction \
-    --prefer-dist
-
-
-# =========================
-# Vite / Node build stage
-# =========================
-FROM node:20-bookworm-slim AS vite_build
-
-WORKDIR /app
-RUN corepack enable
-
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
-
-COPY . .
-RUN yarn build
-
-
-# =========================
-# Final application image
-# =========================
-FROM base AS app
-
-ENV COMPOSER_ALLOW_SUPERUSER=1
+# Set working directory
 WORKDIR /var/www/html
 
-# Copy source
+# Copy project files
 COPY . .
 
-# Copy vendor & built assets
+# Copy vendor libraries from composer stage
 COPY --from=composer_build /app/vendor ./vendor
-COPY --from=vite_build /app/public/build ./public/build
 
-# Folder wajib Laravel di runtime
-RUN mkdir -p \
-    storage/framework/cache \
-    storage/framework/sessions \
-    storage/framework/views \
-    storage/logs \
+# Copy frontend assets from frontend stage
+# Assuming Vite build output is in public/build
+COPY --from=frontend /app/public/build ./public/build
+
+# Setup file permissions
+RUN chown -R www-data:www-data \
+    storage \
+    bootstrap/cache \
+    && chmod -R 775 \
+    storage \
     bootstrap/cache
 
-# Bersihkan cache yang mungkin ikut ter-copy
-RUN rm -rf bootstrap/cache/*
+# Setup entrypoint
+COPY docker_config/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Permission yang benar
-RUN chown -R www-data:www-data storage bootstrap/cache \
- && find storage bootstrap/cache -type d -exec chmod 775 {} \; \
- && find storage bootstrap/cache -type f -exec chmod 664 {} \;
+# Switch to non-root user?
+# Apache default runs as root then spawns www-data workers.
+# For entrypoint migration we usually stick to root or switch in the script.
+# Sticking with default Apache behavior but ensuring ownership is correct.
 
-RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage || true
+EXPOSE 80
 
-
-# =========================
-# Startup sequence (tanpa entrypoint)
-# =========================
-CMD sh -c "php artisan config:clear && \
-php artisan cache:clear && \
-php artisan route:clear && \
-php artisan view:clear && \
-php artisan storage:link || true && \
-php artisan migrate --force --no-interaction && \
-php artisan config:cache && \
-php artisan route:cache && \
-php artisan view:cache && \
-exec apache2-foreground"
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["apache2-foreground"]
