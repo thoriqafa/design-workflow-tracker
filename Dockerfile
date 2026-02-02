@@ -1,10 +1,10 @@
 # Stage 1: Build frontend assets
 FROM node:18-alpine AS frontend
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+COPY package.json yarn.lock ./
+RUN yarn install
 COPY . .
-RUN npm run build
+RUN yarn build
 
 # Stage 2: Build backend dependencies
 FROM composer:2 AS composer_build
