@@ -15,7 +15,7 @@ COPY composer.json composer.lock ./
 # --no-interaction: Do not ask any interactive question
 # --prefer-dist: Download packages dist (zip) if possible
 # --no-scripts: Do not execute scripts defined in composer.json
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --ignore-platform-reqs
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts --ignore-platform-reqs
 
 # Stage 3: Final application image
 FROM php:8.3-apache AS app
@@ -63,6 +63,12 @@ COPY --from=composer_build /app/vendor ./vendor
 # Copy frontend assets from frontend stage
 # Assuming Vite build output is in public/build
 COPY --from=frontend /app/public/build ./public/build
+
+# Optimize Laravel application
+RUN php artisan optimize:clear && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
 
 # Setup file permissions
 RUN chown -R www-data:www-data \
