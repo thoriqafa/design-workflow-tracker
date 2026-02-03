@@ -11,7 +11,7 @@
       <div class="col-12">
         <div class="card shadow-sm">
           <div class="card-header">
-            <h5 class="mb-0">Update Profile Information</h5>
+            <h5 class="mb-0">Update Profile</h5>
           </div>
           <div class="card-body">
             @include('profile.partials.update-profile-information-form')
@@ -32,7 +32,7 @@
       </div>
 
       {{-- Delete Account --}}
-      {{-- <div class="col-12">
+      <div class="col-12">
         <div class="card shadow-sm mt-3">
           <div class="card-header">
             <h5 class="mb-0">Delete Account</h5>
@@ -41,7 +41,7 @@
             @include('profile.partials.delete-user-form')
           </div>
         </div>
-      </div> --}}
+      </div>
 
     </div>
 

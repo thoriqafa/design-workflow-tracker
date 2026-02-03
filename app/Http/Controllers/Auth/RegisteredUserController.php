@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -31,20 +32,25 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'role' => ['required', 'in:admin,supervisor,staff'],
             // 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'email'    => Str::slug($request->name) . '@any.com',
+            'password' => Hash::make('bmi123456'),
+            'role' => $request->role
         ]);
 
         // event(new Registered($user));
 
         // Auth::login($user);
 
-        return redirect()->route('dashboard');
+        // return redirect()->back()->with('success', 'User berhasil dibuat');
+        return redirect()
+                ->route('usermanagement.index')
+                ->with('success', 'User berhasil dibuat');
     }
 }

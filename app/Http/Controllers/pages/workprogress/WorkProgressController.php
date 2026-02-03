@@ -36,7 +36,7 @@ class WorkProgressController extends Controller
             'item'  => 'required|string|max:50'
         ]);
 
-        $data = $this->workProgressService->createNew($request, $request->all());
+        $data = $this->workProgressService->createNew($request->all());
 
         return response()->json([
             'message' => 'Task berhasil dibuat',
@@ -59,8 +59,8 @@ class WorkProgressController extends Controller
 
     public function editApproval($headerId)
     {
-        $texts = $this->workProgressService->findApprovalTextByHeaderId($headerId); 
-        $colors = $this->workProgressService->findApprovalColorByHeaderId($headerId); 
+        $texts = $this->workProgressService->findApprovalTextByHeaderId($headerId);
+        $colors = $this->workProgressService->findApprovalColorByHeaderId($headerId);
 
         return response()->json([
             'status' => 'success',

@@ -2,6 +2,7 @@
 
 namespace App\Services\workprogress;
 
+use App\Helpers\Helpers;
 use App\Repositories\WorkProgressRepository;
 use App\Repositories\WorkProgressColorReviewRepository;
 use App\Repositories\WorkProgressTextReviewRepository;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+
 
 class WorkProgressService
 {
@@ -159,11 +161,11 @@ class WorkProgressService
             ->make(true);
     }
 
-    public function createNew(Request $request,array $data)
+    public function createNew(array $data)
     {
-        return DB::transaction(function () use ($request, $data) {
+        return DB::transaction(function () use ($data) {
 
-            $clientIp = $request->ip();
+            $clientIp = Helpers::clientIp();
             $reqData = array_merge($data, [
                 'computer_ip'       => $clientIp,
                 'computer_name'     => gethostbyaddr($clientIp),

@@ -308,4 +308,16 @@ class Helpers
 }
 CSS;
   }
+
+  public static function clientIp(): string
+  {
+    $request = request();
+
+    $forwarded = $request->header('X-Forwarded-For');
+    if ($forwarded) {
+      return trim(explode(',', $forwarded)[0]);
+    }
+
+    return $request->server('REMOTE_ADDR') ?? '0.0.0.0';
+  }
 }
