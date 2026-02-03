@@ -97,12 +97,12 @@
 
 // Layout navbar search input
 @mixin searchInputContainer {
-  inset-inline-start: calc(calc(100% - map-get($container-max-widths, "xxl")) * .5);
+  inset-inline-start: calc(calc(100% - map-get($container-max-widths, 'xxl')) * 0.5);
 }
 
 // Layout navbar search close icon
 @mixin searchInputIconToggler {
-  inset-inline-end: calc(calc(100% - map-get($container-max-widths, "xxl") + 5rem) * .5);
+  inset-inline-end: calc(calc(100% - map-get($container-max-widths, 'xxl') + 5rem) * 0.5);
 }
 
 // Layout sticky style
@@ -115,10 +115,10 @@
     @include border-top-radius(0);
   }
   .layout-navbar-fixed & {
-    inset-block-start: calc($navbar-height + $spacer - .5625rem);
+    inset-block-start: calc($navbar-height + $spacer - 0.5625rem);
   }
   .layout-menu-fixed .layout-horizontal & {
-    inset-block-start: calc($navbar-height * 2 - .25rem);
+    inset-block-start: calc($navbar-height * 2 - 0.25rem);
   }
   .layout-menu-fixed.layout-navbar-fixed .layout-horizontal & {
     inset-block-start: $navbar-height;
@@ -131,7 +131,7 @@
   flex-wrap: nowrap;
   block-size: $navbar-height;
   color: var(--#{$prefix}body-color);
-  padding-block: .5rem;
+  padding-block: 0.5rem;
 
   .navbar {
     transform: translate3d(0, 0, 0);
@@ -295,7 +295,7 @@
     }
   }
 
-  &[class*="bg-"]:not(.bg-navbar-theme) {
+  &[class*='bg-']:not(.bg-navbar-theme) {
     .nav-item {
       .input-group-text,
       .dropdown-toggle {
@@ -326,7 +326,7 @@
         .dropdown-menu {
           position: absolute;
           inline-size: 92%;
-          inset-inline-start: .9rem;
+          inset-inline-start: 0.9rem;
           min-inline-size: auto;
         }
       }
@@ -362,7 +362,7 @@
       &.window-scrolled {
         .layout-navbar {
           backdrop-filter: saturate(200%) blur(6px);
-          background-color: rgba(var(--#{$prefix}paper-bg-rgb), .88);
+          background-color: rgba(var(--#{$prefix}paper-bg-rgb), 0.88);
         }
       }
     }
@@ -395,7 +395,7 @@
   }
   @include media-breakpoint-up($menu-collapsed-layout-breakpoint) {
     &:not(.layout-horizontal) .menu-inner {
-      margin-block-start: .75rem;
+      margin-block-start: 0.75rem;
     }
   }
 
@@ -444,7 +444,7 @@
   :dir(rtl) & {
     transform: rotate(180deg);
   }
-  transition-duration: .3s;
+  transition-duration: 0.3s;
   transition-property: transform;
 }
 @include media-breakpoint-up(lg) {
@@ -464,7 +464,7 @@
   .layout-menu-collapsed:not(.layout-menu-hover, .layout-menu-offcanvas, .layout-menu-fixed-offcanvas) {
     .layout-menu .menu-vertical,
     .layout-menu.menu-vertical {
-      @include layout-menu-collapsed ();
+      @include layout-menu-collapsed();
     }
   }
 
@@ -475,7 +475,7 @@
       margin-inline-end: -calc(var(--#{$prefix}menu-width) + var(--#{$prefix}menu-collapsed-width));
       .layout-menu-toggle .icon-base {
         transform: rotate(180deg);
-        transition-duration: .3s;
+        transition-duration: 0.3s;
         transition-property: transform;
         :dir(rtl) & {
           transform: rotate(0deg);
@@ -578,8 +578,8 @@ html:not(.layout-footer-fixed) .content-wrapper {
     inset-inline: 0;
   }
   .container-p-y {
-    &:not([class^="pt-"]):not([class*=" pt-"]) {
-      padding-block-start: calc($container-padding-y + .4rem) !important;
+    &:not([class^='pt-']):not([class*=' pt-']) {
+      padding-block-start: calc($container-padding-y + 0.4rem) !important;
     }
   }
 }
@@ -588,9 +588,14 @@ html:not(.layout-footer-fixed) .content-wrapper {
   position: fixed;
   z-index: 10;
   backdrop-filter: saturate(200%) blur(10px);
-  background: linear-gradient(180deg, rgba(var(--#{$prefix}body-bg-rgb), 70%) 44%, rgba(var(--#{$prefix}body-bg-rgb), 43%) 73%, rgba(var(--#{$prefix}body-bg-rgb), 0%));
+  background: linear-gradient(
+    180deg,
+    rgba(var(--#{$prefix}body-bg-rgb), 70%) 44%,
+    rgba(var(--#{$prefix}body-bg-rgb), 43%) 73%,
+    rgba(var(--#{$prefix}body-bg-rgb), 0%)
+  );
   block-size: 4.75rem;
-  content: "";
+  content: '';
   inline-size: 100%;
   inset-block-start: 0;
   mask: linear-gradient(var(--#{$prefix}body-bg), var(--#{$prefix}body-bg) 18%, transparent 100%);
@@ -648,8 +653,16 @@ html:not(.layout-footer-fixed) .content-wrapper {
     inset-block-start: $navbar-height;
   }
 
-  .layout-menu-fixed:not(.layout-navbar-hidden) .layout-horizontal .layout-page .menu-horizontal + [class*="container-"],
-  .layout-menu-fixed-offcanvas:not(.layout-navbar-hidden) .layout-horizontal .layout-page .menu-horizontal + [class*="container-"] {
+  .layout-menu-fixed:not(.layout-navbar-hidden)
+    .layout-horizontal
+    .layout-page
+    .menu-horizontal
+    + [class*='container-'],
+  .layout-menu-fixed-offcanvas:not(.layout-navbar-hidden)
+    .layout-horizontal
+    .layout-page
+    .menu-horizontal
+    + [class*='container-'] {
     padding-block-start: calc($container-padding-y + 3.75rem) !important;
   }
 
@@ -668,7 +681,11 @@ html:not(.layout-footer-fixed) .content-wrapper {
         inset-inline-start: calc(var(--#{$prefix}menu-collapsed-width) - var(--#{$prefix}scrollbar-width));
       }
       .layout-content-navbar:not(.layout-without-menu) .layout-navbar:has(.container-fluid) {
-        inline-size: calc(100% - calc(#{$container-padding-x} * 2) - var(--#{$prefix}menu-collapsed-width) - var(--#{$prefix}scrollbar-width));
+        inline-size: calc(
+          100% - calc(#{$container-padding-x} * 2) - var(--#{$prefix}menu-collapsed-width) - var(
+              --#{$prefix}scrollbar-width
+            )
+        );
       }
     }
     &:dir(rtl).swal2-shown,
@@ -677,7 +694,11 @@ html:not(.layout-footer-fixed) .content-wrapper {
         inset-inline-start: calc(var(--#{$prefix}menu-collapsed-width) + var(--#{$prefix}scrollbar-width));
       }
       .layout-content-navbar:not(.layout-without-menu) .layout-navbar {
-        inline-size: calc(100% - calc(#{$container-padding-x} * 2) - var(--#{$prefix}menu-collapsed-width) - var(--#{$prefix}scrollbar-width));
+        inline-size: calc(
+          100% - calc(#{$container-padding-x} * 2) - var(--#{$prefix}menu-collapsed-width) - var(
+              --#{$prefix}scrollbar-width
+            )
+        );
       }
       .layout-content-navbar:not(.layout-without-menu) .layout-navbar:has(.container-fluid) {
         inset-inline-start: calc(var(--#{$prefix}menu-collapsed-width) + var(--#{$prefix}scrollbar-width));
@@ -772,10 +793,9 @@ html:not(.layout-footer-fixed) .content-wrapper {
       transform,
       -webkit-transform;
 
-    :dir(rtl) &{
+    :dir(rtl) & {
       transform: translate3d(100%, 0, 0);
     }
-
 
     .layout-menu-expanded & {
       transform: translate3d(0, 0, 0) !important;
@@ -826,7 +846,7 @@ body:not(.modal-open) {
   }
 
   .layout-content-navbar .layout-navbar {
-    z-index: $zindex-menu-fixed - 5;
+    z-index: $zindex-menu-fixed - 20;
   }
 }
 
@@ -941,7 +961,13 @@ body:not(.modal-open) {
 }
 
 @include media-breakpoint-up($menu-collapsed-layout-breakpoint) {
-  .layout-menu-collapsed:not(.layout-transitioning, .layout-menu-offcanvas, .layout-menu-fixed, .layout-menu-fixed-offcanvas) .layout-menu {
+  .layout-menu-collapsed:not(
+      .layout-transitioning,
+      .layout-menu-offcanvas,
+      .layout-menu-fixed,
+      .layout-menu-fixed-offcanvas
+    )
+    .layout-menu {
     transition-duration: $menu-animation-duration;
     transition-property: margin-inline-start, margin-inline-end, inline-size;
   }

@@ -30,6 +30,10 @@
   <meta name="error-message" content="Periksa kembali input yang Anda masukkan">
 @endif
 
+@if ($errors->any())
+  <meta name="has-errors" content="1">
+@endif
+
 @section('content')
 
   <div class="row">
@@ -78,12 +82,12 @@
             <table class="table table-bordered table-striped w-100" id="userListTable">
               <thead>
                 <tr>
-                  <th>#</th>
                   <th>No</th>
                   <th>Nama</th>
                   <th>Role</th>
                   <th>Tgl Dibuat</th>
                   <th>Tgl Diubah</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
             </table>

@@ -74,18 +74,20 @@ class UserServiceService
             ->make(true);
     }
 
-    public function update(Request $request, int $id)
+    public function update(array $data, int $id)
     {
-        $user = $this->userRepository->find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User not found.'], 404);
-        }
+        $reqData = array_merge($data, [
+            'updated_at' => now(),
+        ]);
 
-        $user->name = $request->input('name');
-        $user->role = $request->input('role');
-        $user->save();
+        $user = $this->userRepository->update($id, $reqData);
+        return $user;
+    }
 
-        return response()->json(['message' => 'User updated successfully.']);
+    public function delete(int $id)
+    {
+        $user = $this->userRepository->delete($id);
+        return $user;
     }
 
 }

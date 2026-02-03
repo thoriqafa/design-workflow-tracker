@@ -4,7 +4,7 @@
       "url": "/",
       "name": "Dashboard",
       "icon": "menu-icon icon-base bx bx-grid-alt",
-      "slug": "pages-home",
+      "slug": "dashboard",
       "roles": [
         "admin",
         "staff",
@@ -27,7 +27,7 @@
         {
           "name": "My Works",
           "url": "/work-progress",
-          "slug": "workprogress",
+          "slug": "workprogress.index",
           "roles": [
             "admin",
             "staff"
@@ -36,13 +36,23 @@
         {
           "name": "Monitoring Works",
           "url": "/work-monitoring",
-          "slug": "workmonitoring",
+          "slug": "workmonitoring.index",
           "roles": [
             "admin",
             "staff",
             "supervisor"
           ]
         }
+      ]
+    },
+    {
+      "url": "/user-management",
+      "name": "User",
+      "icon": "menu-icon icon-base bx bx-user",
+      "slug": "usermanagement.index",
+      "roles": [
+        "admin",
+        "supervisor"
       ]
     }
   ]

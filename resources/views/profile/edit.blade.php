@@ -32,7 +32,7 @@
       </div>
 
       {{-- Delete Account --}}
-      <div class="col-12">
+      {{-- <div class="col-12">
         <div class="card shadow-sm mt-3">
           <div class="card-header">
             <h5 class="mb-0">Delete Account</h5>
@@ -41,7 +41,7 @@
             @include('profile.partials.delete-user-form')
           </div>
         </div>
-      </div>
+      </div> --}}
 
     </div>
 

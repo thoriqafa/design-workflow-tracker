@@ -15,7 +15,7 @@
           <div class="mb-3">
             <label class="form-label">Nama</label>
             <input type="text" name="name" value="{{ old('name') }}"
-              class="form-control @error('name') is-invalid @enderror" required autofocus>
+              class="form-control @error('name') is-invalid @enderror" autofocus>
             @error('name')
               <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -23,8 +23,9 @@
 
           <div class="mb-3">
             <label class="form-label">Role</label>
-            <select name="role" class="form-select selectpicker w-100 mb-3" data-style="btn-default" required>
-              <option>Pilih Role</option>
+            <select name="role" class="form-select selectpicker w-100 mb-3 @error('role') is-invalid @enderror"
+              data-style="btn-default">
+              <option value="">Pilih Role</option>
               <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
               <option value="supervisor" {{ old('role') == 'supervisor' ? 'selected' : '' }}>Supervisor</option>
               <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>Staff</option>

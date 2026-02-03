@@ -34,4 +34,18 @@ class UserRepository
             ]);
         return $query;
     }
+
+    public function update($id, array $data)
+    {
+        $request = User::find($id);
+        $request->update($data);
+
+        return $request;
+    }
+
+    public function delete(int $id)
+    {
+        $query = User::destroy($id);
+        return $query;
+    }
 }

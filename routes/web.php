@@ -22,6 +22,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->prefix('user-management')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('usermanagement.index');
     Route::get('/datatable', [UserController::class, 'datatable'])->name('usermanagement.datatable');
+    Route::get('/{id}', [UserController::class, 'show'])->name('usermanagement.show');
+    Route::post('/{id}', [UserController::class, 'update'])->name('usermanagement.update');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('usermanagement.destroy');
+    Route::post('/{id}/reset-password', [UserController::class, 'resetPassword'])->name('usermanagement.resetpassword');
 });
 
 Route::middleware('auth')->prefix('work-progress')->group(function () {
