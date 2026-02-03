@@ -37,7 +37,7 @@
               {{-- </a> --}}
             </div>
             <!-- /Logo -->
-            <h4 class="mb-1">Welcome to {{ config('variables.templateName') }}! 👋.</h4>
+            <h4 class="mb-1">Welcome to {{ config('variables.templateName') }}! 👋</h4>
             <p class="mb-6">Welcome back. Sign in to continue managing your workflow.</p>
 
             <!-- Session Status -->
