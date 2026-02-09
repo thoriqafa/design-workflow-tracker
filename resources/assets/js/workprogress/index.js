@@ -228,6 +228,10 @@ $(document).ready(function () {
   //   table.ajax.reload();
   // });
 
+  $('#btnRefresh').on('click', function () {
+    $('#workProgressTable').DataTable().ajax.reload(null, false);
+  });
+
   $('#workProgressTable').on('click', '.btn-row-edit', function (e) {
     e.stopPropagation();
 
@@ -268,12 +272,15 @@ $(document).ready(function () {
     const end = new Date(endTime);
 
     const diffMs = end - start;
-    const diffMinutes = Math.floor(diffMs / 60000);
 
-    const hours = Math.floor(diffMinutes / 60);
-    const minutes = diffMinutes % 60;
+    const totalSeconds = Math.floor(diffMs / 1000);
 
-    const duration = `${hours}.${String(minutes).padStart(2, '0')}`;
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const duration =
+      String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
 
     // console.log(startTime + ' - ' + endTime + ' - ' + duration);
 

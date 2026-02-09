@@ -54,7 +54,7 @@
               </div>
             @endif
 
-            <div class="card icon-card cursor-pointer text-center mb-6 mx-3 border shadow-none">
+            <div class="card icon-card cursor-pointer text-center mb-6 mx-3 border shadow-none" id="btnRefresh">
               <div class="card-body py-5 px-0">
                 <i class="bx bx-refresh fs-2 mb-1"></i>
                 <p class="icon-name mb-0">

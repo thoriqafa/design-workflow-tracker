@@ -74,11 +74,7 @@ class WorkProgressController extends Controller
     public function storeApproval(Request $request)
     {
         $request->validate([
-            'header_id' => 'required|integer',
-            'approval_text' => 'required|array',
-            'approval_text.*.approval_text' => 'required|string|max:255',
-            'approval_color' => 'required|array',
-            'approval_color.*.approval_color' => 'required|string|max:50',
+            'header_id' => 'required|integer'
         ]);
 
         $data = [

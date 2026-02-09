@@ -3,7 +3,7 @@ stages:
 
 variables:
   # Define the deployment directory here for easy reconfiguration
-  APP: "desflow"
+  APP: 'desflow'
 
 deploy_production:
   stage: deploy

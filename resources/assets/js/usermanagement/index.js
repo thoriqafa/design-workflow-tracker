@@ -145,7 +145,7 @@ $(document).ready(function () {
   // =================== end =======================
 
   // =================================================
-  // button reset password : default = bmi12345
+  // button reset password : default = bmi123456
   // =================== start =======================
   $('#userListTable').on('click', '.btn-row-reset-password', function (e) {
     e.stopPropagation();
@@ -157,7 +157,7 @@ $(document).ready(function () {
       html: `
             Password user akan direset menjadi:
             <br>
-            <b>bmi12345</b>
+            <b>bmi123456</b>
         `,
       icon: 'warning',
       showCancelButton: true,

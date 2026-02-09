@@ -263,6 +263,14 @@ $(document).ready(function () {
   });
   // =================== end =======================
 
+  // =================================================
+  // untuk refresh table
+  // =================== start =======================
+  $('#btnRefresh').on('click', function () {
+    $('#workMonitoringTable').DataTable().ajax.reload(null, false);
+  });
+  // =================== end =======================
+
   // $('#filter-status').change(function () {
   //   table.ajax.reload();
   // });

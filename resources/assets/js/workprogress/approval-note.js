@@ -32,6 +32,7 @@ $(document).ready(function () {
           Swal.fire('Sukses', response.message, 'success');
           $('#modalApprovalNote').modal('hide');
           form[0].reset();
+          $('#workProgressTable').DataTable().ajax.reload(null, false);
         } else {
           Swal.fire('Error', response.message, 'error');
         }
