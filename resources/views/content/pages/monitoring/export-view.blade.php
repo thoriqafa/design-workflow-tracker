@@ -124,14 +124,14 @@
           {{ $item->text_created_at ? \Carbon\Carbon::parse($item->text_created_at)->format('Y-m-d H:i:s') : '-' }}
         </td>
         <td style="border:1px solid #000000; vertical-align:middle;" align="left">
-          {!! $item->text_review ? '• ' . str_replace('||', '<br>• ', $item->text_review) : '-' !!}
+          {!! $item->text_review ? '• ' . str_replace('||', '<br>• ', e($item->text_review)) : '-' !!}
         </td>
 
         <td style="border:1px solid #000000; vertical-align:middle;" align="center">
           {{ $item->color_created_at ? \Carbon\Carbon::parse($item->color_created_at)->format('Y-m-d H:i:s') : '-' }}
         </td>
         <td style="border:1px solid #000000; vertical-align:middle;" align="left">
-          {!! $item->color_review ? '• ' . str_replace('||', '<br>• ', $item->color_review) : '-' !!}
+          {!! $item->color_review ? '• ' . str_replace('||', '<br>• ', e($item->color_review)) : '-' !!}
         </td>
 
         <td style="border:1px solid #000000; vertical-align:middle;">{{ $item->remarks ?? '-' }}</td>
