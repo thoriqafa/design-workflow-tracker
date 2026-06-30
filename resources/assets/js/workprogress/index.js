@@ -16,6 +16,10 @@ function nowYmdHi() {
   );
 }
 
+function formatDateTime(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 // =================================================
 // function untuk pisahkan || ke poin poin
 // =================== start =======================
@@ -38,17 +42,22 @@ function splitToBullet(data) {
 // =================== end =======================
 
 $(document).ready(function () {
+  let tglAwal = formatDateTime(new Date());
+  let tglAkhir = formatDateTime(new Date());
+  let statusWork = '';
+
   let workProgressTable = $('#workProgressTable').DataTable({
     processing: true,
     serverSide: true,
     responsive: false,
     autoWidth: false,
     ajax: {
-      url: baseUrl + '/work-progress/datatable'
-      // data: function (d) {
-      //   d.status = $('#filter-status').val();
-      //   d.tanggal = $('#filter-tanggal').val();
-      // }
+      url: baseUrl + '/work-progress/datatable',
+      data: function (d) {
+        d.statusWork = statusWork;
+        d.tanggalAwal = tglAwal;
+        d.tanggalAkhir = tglAkhir;
+      }
     },
 
     columns: [
@@ -227,6 +236,31 @@ $(document).ready(function () {
   //   $(this).val('');
   //   table.ajax.reload();
   // });
+
+  var bsRangePickerBasic = $('#bs-rangepicker-basic');
+  if (bsRangePickerBasic.length) {
+    bsRangePickerBasic.daterangepicker({
+      opens: isRtl ? 'left' : 'right'
+    });
+  }
+
+  $('#bs-rangepicker-basic').on('apply.daterangepicker', function (ev, picker) {
+    tglAwal = formatDateTime(picker.startDate.toDate());
+    tglAkhir = formatDateTime(picker.endDate.toDate());
+  });
+
+  $('#status-work').on('change', function () {
+    statusWork = $(this).val();
+  });
+
+  $('#btnFilter').on('click', function () {
+    if (!tglAwal || !tglAkhir) {
+      alert('Silakan pilih range tanggal terlebih dahulu');
+      return;
+    }
+
+    workProgressTable.ajax.reload();
+  });
 
   $('#btnRefresh').on('click', function () {
     $('#workProgressTable').DataTable().ajax.reload(null, false);

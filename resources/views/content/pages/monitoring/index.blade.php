@@ -69,7 +69,7 @@
             {{-- FILTER --}}
             <div class="row mb-3">
               <div class="col-md-3">
-                <label for="bs-rangepicker-basic" class="form-label">Basic</label>
+                <label for="bs-rangepicker-basic" class="form-label">Tanggal</label>
                 <input type="text" id="bs-rangepicker-basic" class="form-control" />
               </div>
 

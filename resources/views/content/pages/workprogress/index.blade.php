@@ -6,12 +6,16 @@
 
 @section('title', 'My Work Progress')
 
+@section('vendor-style')
+  @vite(['resources/assets/vendor/libs/bootstrap-select/bootstrap-select.scss', 'resources/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.scss'])
+@endsection
+
 @section('page-style')
   @vite(['resources/assets/css/workprogress/index.css'])
 @endsection
 
 @section('vendor-script')
-  @vite(['resources/assets/vendor/libs/jquery-repeater/jquery-repeater.js'])
+  @vite(['resources/assets/vendor/libs/jquery-repeater/jquery-repeater.js', 'resources/assets/vendor/libs/moment/moment.js', 'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.js', 'resources/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js'])
 @endsection
 
 @section('page-script')
@@ -75,6 +79,30 @@
                 <option value="2">Rejected</option>
               </select>
             </div> --}}
+
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label for="bs-rangepicker-basic" class="form-label">Tanggal</label>
+              <input type="text" id="bs-rangepicker-basic" class="form-control" />
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Status</label>
+              <select id="status-work" class="selectpicker w-100" data-style="btn-default">
+                <option value="">All</option>
+                <option value="0">Not Started</option>
+                <option value="1">In Progress</option>
+                <option value="2">Finished</option>
+              </select>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+              <button type="button" class="btn btn-primary" id="btnFilter">
+                Filter
+              </button>
+            </div>
 
           </div>
 

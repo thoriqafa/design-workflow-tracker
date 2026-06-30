@@ -46,10 +46,6 @@ class WorkProgressService
         $user = auth()->user();
 
         $query = $this->workProgressRepository->datatableQuery();
-        $start = now()->startOfDay();
-        $end   = now()->endOfDay();
-
-        $query->whereBetween('tx_work_progress.created_at', [$start, $end]);
 
         // dd(
         //     $query->toSql(),
@@ -68,33 +64,34 @@ class WorkProgressService
             ->addIndexColumn()
 
             ->filter(function ($query) use ($request) {
-                // if ($request->status !== null && $request->status !== '') {
-                //     $query->where('tx_work_progress.status', $request->status);
-                // }
+                if ($request->statusWork !== null && $request->statusWork !== '') {
+                    $query->where('tx_work_progress.status_work', $request->statusWork);
+                }
 
-                // if ($request->tanggal !== null && $request->tanggal !== '') {
-                //     $range = explode(' to ', $request->tanggal);
-                //     if (count($range) === 2) {
-                //         $start = Carbon::createFromFormat('Y-m-d', $range[0])->startOfDay();
-                //         $end = Carbon::createFromFormat('Y-m-d', $range[1])->endOfDay();
-                //         $query->whereBetween('tx_work_progress.created_at', [$start, $end]);
-                //     }
-                // }
+                if ($request->tanggalAwal !== null && $request->tanggalAwal !== '' && $request->tanggalAkhir !== null && $request->tanggalAkhir !== '') {
+                    $query->whereBetween(
+                        'tx_work_progress.created_at',
+                        [
+                            Carbon::parse($request->tanggalAwal)->startOfDay(),
+                            Carbon::parse($request->tanggalAkhir)->endOfDay()
+                        ]
+                    );
+                }
 
-                // if ($search = $request->input('search.value')) {
-                //     $query->where(function ($q) use ($search) {
-                //         $q->where('tx_work_progress.supplier', 'like', "%{$search}%")
-                //         ->orWhere('tx_work_progress.item', 'like', "%{$search}%")
-                //         ->orWhere('tx_work_progress.no_approval', 'like', "%{$search}%")
-                //         ->orWhere('creator.name', 'like', "%{$search}%");
-                //     });
-                // }
+                if ($search = $request->input('search.value')) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('tx_work_progress.supplier', 'like', "%{$search}%")
+                        ->orWhere('tx_work_progress.item', 'like', "%{$search}%")
+                        ->orWhere('tx_work_progress.no_approval', 'like', "%{$search}%")
+                        ->orWhere('creator.name', 'like', "%{$search}%");
+                    });
+                }
             })
 
             ->addColumn('status', function ($row) {
-                if ($row->start_time == null && $row->end_time == null) {
+                if ($row->status_work == 0) {
                     return '<span class="badge bg-secondary">Not Started</span>';
-                } elseif ($row->start_time != null && $row->end_time == null) {
+                } elseif ($row->status_work == 1) {
                     return '<span class="badge bg-warning">In Progress</span>';
                 }
 
